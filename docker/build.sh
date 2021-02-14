@@ -9,8 +9,6 @@ cp ../build/posapi ./
 cp ../conf.ini ./
 cp ../lib/libPosAPI.so ./
 
-rm -r build
-
 docker build -t nasanjargalb/posapi-webapp:$1 .
 
 rm -r build/ conf.ini posapi lib*
