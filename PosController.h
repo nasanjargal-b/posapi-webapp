@@ -7,15 +7,20 @@
 
 
 #include <QHttpServer>
+#include <QMutex>
+
+class ScheduleSender;
 
 class PosController : public QObject {
+    friend class ScheduleSender;
+
 Q_OBJECT
 private:
     QHttpServer *httpServer;
+    QMutex reqLock;
 public:
     PosController(QHttpServer *httpServer);
 
-    QJsonObject sendData();
 private:
     void init();
 
@@ -28,6 +33,8 @@ private:
     QJsonObject put(QByteArray param);
 
     QJsonObject returnBill(QByteArray param);
+
+    QJsonObject sendData();
 };
 
 

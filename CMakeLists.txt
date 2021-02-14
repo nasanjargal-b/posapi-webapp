@@ -22,7 +22,7 @@ set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Script Qt5::Network Qt5::HttpServer c
 
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
-add_executable(${PROJECT_NAME} main.cpp PosController.cpp PosController.h ExportLib.h PosAPI.h)
+add_executable(${PROJECT_NAME} main.cpp PosController.cpp PosController.h PosAPI.h ScheduleSender.cpp ScheduleSender.h Logger.cpp Logger.h)
 
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED})

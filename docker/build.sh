@@ -6,8 +6,11 @@ mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - 
 
 cd ..
 cp ../build/posapi ./
-cp ../webapp.ini ./
+cp ../conf.ini ./
+cp ../lib/libPosAPI.so ./
 
 rm -r build
 
 docker build -t nasanjargalb/posapi-webapp:$1 .
+
+rm -r build/ conf.ini posapi lib*

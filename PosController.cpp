@@ -49,25 +49,53 @@ void PosController::init() {
 }
 
 QJsonObject PosController::checkApi() {
-    return QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::checkApi())).object();
+    QMutexLocker locker(&reqLock);
+    const QJsonDocument &document = QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::checkApi()));
+    return document.object();
 }
 
 QJsonObject PosController::getInformation() {
-    return QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::getInformation())).object();
+    QMutexLocker locker(&reqLock);
+    const QJsonDocument &document = QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::getInformation()));
+    return document.object();
 }
 
 QJsonObject PosController::callFunction(QByteArray funcName, QByteArray param) {
-    return QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::callFunction(funcName.toStdString(), param.toStdString()))).object();
+    QMutexLocker locker(&reqLock);
+    const QJsonDocument &document = QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::callFunction(funcName.toStdString(), param.toStdString())));
+    return document.object();
 }
 
 QJsonObject PosController::put(QByteArray param) {
-    return QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::put(param.toStdString()))).object();
+    QMutexLocker locker(&reqLock);
+    const QJsonDocument &document = QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::put(param.toStdString())));
+    QJsonObject object = document.object();
+
+    /**
+     * Төлбөрийн баримтын журамд заагдсаны дагуу хадгалагдах ёсгүй мэдээллүүдийг масклаж өөрчлөнө.
+     * 1. lottery
+     * 2. qrData
+     */
+    if (object.contains("lottery")) {
+        QString lottery = object["lottery"].toString().replace(QRegExp("[a-zA-Z0-9]"), "*");
+        object["lottery"] = lottery;
+    }
+    if (object.contains("qrData")) object["qrData"] = "QR DATA";
+
+    qInfo() << "put: " << QString::fromUtf8(QJsonDocument(object).toJson());
+    return document.object();
 }
 
 QJsonObject PosController::returnBill(QByteArray param) {
-    return QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::returnBill(param.toStdString()))).object();
+    QMutexLocker locker(&reqLock);
+    const QJsonDocument &document = QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::returnBill(param.toStdString())));
+    qInfo() << "returnBill: " << QString::fromUtf8(document.toJson());
+    return document.object();
 }
 
 QJsonObject PosController::sendData() {
-    return QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::sendData())).object();
+    QMutexLocker locker(&reqLock);
+    const QJsonDocument &document = QJsonDocument::fromJson(QByteArray::fromStdString(PosAPI::sendData()));
+    qInfo() << "sendData: " << QString::fromUtf8(document.toJson());
+    return document.object();
 }
