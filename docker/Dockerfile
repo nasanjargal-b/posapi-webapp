@@ -22,7 +22,6 @@ WORKDIR /posapi
 
 ADD posapi /posapi/posapi
 ADD conf.ini /posapi/conf.ini
-ADD libPosAPI.so /posapi/lib/libPosAPI.so
 ADD run.sh /posapi/run.sh
 
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/posapi/lib

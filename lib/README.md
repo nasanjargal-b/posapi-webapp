@@ -1,0 +1,1 @@
+Testing libPosAPI.so файл байршина.

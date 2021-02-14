@@ -179,4 +179,3 @@ CTestTestfile.cmake
 
 build/
 docker-opt/
-lib/
